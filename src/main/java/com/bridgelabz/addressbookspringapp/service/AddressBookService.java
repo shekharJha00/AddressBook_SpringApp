@@ -21,6 +21,11 @@ public class AddressBookService implements IAddressBookService {
     }
 
     @Override
+    public List<ContactData> getAddressBookData() {
+        return addressBookRepository.findAll();
+    }
+
+    @Override
     public ContactData createContactData(ContactDto contactDTO) {
         ContactData contactData = null;
         contactData = new ContactData(contactDTO);
@@ -44,6 +49,7 @@ public class AddressBookService implements IAddressBookService {
     public void deleteContactById(int contactId) {
         addressBookRepository.deleteById(contactId);
     }
+
     @Override
     public List<ContactData> sortContactsByCity() {
         return addressBookRepository.sortByCity();

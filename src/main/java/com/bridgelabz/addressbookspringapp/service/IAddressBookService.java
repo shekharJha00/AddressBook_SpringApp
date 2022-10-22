@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface IAddressBookService {
     String getWelcomeMessage();
+   List<ContactData> getAddressBookData();
 
     ContactData createContactData(ContactDto contactDTO);
 

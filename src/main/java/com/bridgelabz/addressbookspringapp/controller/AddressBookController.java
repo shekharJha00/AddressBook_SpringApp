@@ -19,10 +19,18 @@ public class AddressBookController {
     @Autowired
     IAddressBookService addressBookService;
 
-    
+
     @GetMapping(value = {"", "/welcome"})
     public String welcomeMessage() {
         return addressBookService.getWelcomeMessage();
+    }
+
+    @GetMapping(value = {"/", "/get"})
+    public ResponseEntity<ResponseDto> getEmployeePayrollData() {
+        List<ContactData> contactDataList = null;
+        contactDataList = addressBookService.getAddressBookData();
+        ResponseDto respDTO = new ResponseDto("Get Call Successful", contactDataList);
+        return new ResponseEntity<ResponseDto>(respDTO, HttpStatus.OK);
     }
 
     @PostMapping("/add")
