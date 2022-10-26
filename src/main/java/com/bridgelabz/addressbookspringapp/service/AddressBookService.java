@@ -15,6 +15,9 @@ public class AddressBookService implements IAddressBookService {
     @Autowired
     AddressBookRepository addressBookRepository;
 
+    @Autowired
+    Utility addressBookUtility;
+
     @Override
     public String getWelcomeMessage() {
         return "Welcome to Address Book Application";
@@ -25,28 +28,36 @@ public class AddressBookService implements IAddressBookService {
         return addressBookRepository.findAll();
     }
 
-    @Override
-    public ContactData createContactData(ContactDto contactDTO) {
-        ContactData contactData = null;
-        contactData = new ContactData(contactDTO);
-        return addressBookRepository.save(contactData);
-    }
 
     @Override
-    public ContactData updateContactData(int contactId, ContactDto contactDTO) {
+    public String createContactData(ContactDto contactDto) {
+        ContactData contactData = new ContactData(contactDto);
+        addressBookRepository.save(contactData);
+        String token = addressBookUtility.createToken(contactData.getContactId());
+
+        return token;
+    }
+
+
+    @Override
+    public ContactData updateContactData(String token, ContactDto contactDto) {
+        int contactId = addressBookUtility.decodeJWT(token);
         ContactData contactData = addressBookRepository.findById(contactId).orElseThrow(() -> new AddressBookException("Id May Not be Existed"));
-        contactData.updateContactInfo(contactDTO);
+        contactData.updateContactInfo(contactDto);
         return addressBookRepository.save(contactData);
     }
 
     @Override
-    public ContactData getContactById(int contactId) {
-
+    public ContactData getContactById(String token) {
+        int contactId = addressBookUtility.decodeJWT(token);
         return addressBookRepository.findById(contactId).orElseThrow(() -> new AddressBookException("Id not available"));
     }
 
+
     @Override
-    public void deleteContactById(int contactId) {
+    public void deleteContactById(String token) {
+
+        int contactId = addressBookUtility.decodeJWT(token);
         addressBookRepository.deleteById(contactId);
     }
 

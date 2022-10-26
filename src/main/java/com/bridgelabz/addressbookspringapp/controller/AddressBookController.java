@@ -16,9 +16,9 @@ import java.util.List;
 @RequestMapping("/AddressBook")
 public class AddressBookController {
 
+
     @Autowired
     IAddressBookService addressBookService;
-
 
     @GetMapping(value = {"", "/welcome"})
     public String welcomeMessage() {
@@ -34,40 +34,42 @@ public class AddressBookController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ResponseDto> AddContact(@Valid @RequestBody ContactDto contactDTO) {
-        ContactData contactData = null;
-        contactData = addressBookService.createContactData(contactDTO);
-        ResponseDto responseDTO = new ResponseDto("Contact Data Created SuccessFully", contactData);
-        return new ResponseEntity<ResponseDto>(responseDTO, HttpStatus.OK);
+    public ResponseEntity<ResponseDto> addContact(@Valid @RequestBody ContactDto contactDto) {
+        String token = addressBookService.createContactData(contactDto);
+        ResponseDto responseDto = new ResponseDto("Contact Data Created SuccessFully", token);
+        return new ResponseEntity<ResponseDto>(responseDto, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update/{contactId}")
-    public ResponseEntity<ResponseDto> updateContact(@PathVariable int contactId, @Valid @RequestBody ContactDto contactDTO) {
+
+    @PutMapping("/update")
+    public ResponseEntity<ResponseDto> updateData(@RequestHeader String token, @Valid @RequestBody ContactDto contactDto) {
         ContactData contactData = null;
-        contactData = addressBookService.updateContactData(contactId, contactDTO);
+        contactData = addressBookService.updateContactData(token, contactDto);
         ResponseDto responseDTO = new ResponseDto("Updated the Contact Information for this ID", contactData);
         return new ResponseEntity<ResponseDto>(responseDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/get/{contactId}")
-    public ResponseEntity<ResponseDto> getContactById(@PathVariable int contactId) {
+    @GetMapping("/get")
+    public ResponseEntity<ResponseDto> getContactById(@RequestHeader String token) {
         ContactData contactData = null;
-        contactData = addressBookService.getContactById(contactId);
+        contactData = addressBookService.getContactById(token);
         ResponseDto responseDto = new ResponseDto("Got the Contact Information for this ID", contactData);
         return new ResponseEntity<ResponseDto>(responseDto, HttpStatus.OK);
     }
 
-    @DeleteMapping("delete/{contactId}")
-    public void deleteContactById(@PathVariable int contactId) {
-        addressBookService.deleteContactById(contactId);
+
+    @DeleteMapping("delete")
+    public void deleteContactById(@RequestHeader String token) {
+        addressBookService.deleteContactById(token);
     }
+
 
     @GetMapping("/sortByCity")
     public ResponseEntity<ResponseDto> sortByCity() {
         List<ContactData> contactList = null;
         contactList = addressBookService.sortContactsByCity();
-        ResponseDto responseDTO = new ResponseDto("Sorted Contacts Details", contactList);
-        return new ResponseEntity<ResponseDto>(responseDTO, HttpStatus.OK);
+        ResponseDto responseDto = new ResponseDto("Sorted Contacts Details", contactList);
+        return new ResponseEntity<ResponseDto>(responseDto, HttpStatus.OK);
     }
 
 

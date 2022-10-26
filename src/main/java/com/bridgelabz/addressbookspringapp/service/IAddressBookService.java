@@ -7,15 +7,15 @@ import java.util.List;
 
 public interface IAddressBookService {
     String getWelcomeMessage();
-   List<ContactData> getAddressBookData();
+     List<ContactData> getAddressBookData();
 
-    ContactData createContactData(ContactDto contactDTO);
+    String createContactData(ContactDto contactDto);
 
-    ContactData updateContactData(int contactId, ContactDto contactDTO);
+    ContactData updateContactData(String token, ContactDto contactDto);
 
-    ContactData getContactById(int contactId);
+    ContactData getContactById(String token);
 
-    void deleteContactById(int contactId);
+    void deleteContactById(String token);
 
     List<ContactData> sortContactsByCity();
 

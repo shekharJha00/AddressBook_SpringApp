@@ -1,12 +1,15 @@
 package com.bridgelabz.addressbookspringapp.service;
 
+import com.bridgelabz.addressbookspringapp.Dto.UserLoginDto;
 import com.bridgelabz.addressbookspringapp.Dto.UserRegistrationDto;
 import com.bridgelabz.addressbookspringapp.model.UserData;
 
+import java.util.Optional;
+
 public interface IUserService {
 
-    UserData createUserRegistration(UserRegistrationDto userRegistrationDTO);
+    String createUserRegistration(UserRegistrationDto userRegistrationDto);
 
 
-    UserData loginAccount(String userName, String password);
+    Optional<UserData> loginAccount(UserLoginDto userLoginDto);
 }
